@@ -1,5 +1,7 @@
 package app;
 
+import app.service.FileService;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -30,6 +32,7 @@ public class MyServlet extends HttpServlet {
         if (path == null) {
             path = "C:\\";
         }
+        path = path.replaceAll("%20", " ");
         File file = new File(path);
         if (!file.exists()) {
             file.mkdir();
@@ -37,31 +40,30 @@ public class MyServlet extends HttpServlet {
         if (file.isDirectory()) {
             showFiles(req, file);
 
-            req.setAttribute("date", new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date()));
+            req.setAttribute("date", new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
             req.setAttribute("path", path);
 
             RequestDispatcher requestDispatcher = req.getRequestDispatcher("explore.jsp");
             requestDispatcher.forward(req, resp);
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
+        else {
+            downloadFile(resp, file);
+        }
     }
 
     private void downloadFile(HttpServletResponse resp, File file) throws IOException {
-        resp.setContentType("text/plain");
+        resp.setContentType("text/html");
         resp.setHeader("Content-disposition", "attachment; filename=" + file.getName());
 
-        try (InputStream in = Files.newInputStream(file.toPath()); OutputStream out = resp.getOutputStream()) {
-            byte[] buffer = new byte[1048];
-
-            int numBytesRead;
-            while ((numBytesRead = in.read(buffer)) > 0) {
-                out.write(buffer, 0, numBytesRead);
-            }
+        OutputStream out = resp.getOutputStream();
+        FileInputStream in = new FileInputStream(file);
+        byte[] buffer = new byte[4096];
+        int length;
+        while ((length = in.read(buffer)) > 0){
+            out.write(buffer, 0, length);
         }
+        in.close();
+        out.flush();
     }
 
     private void showFiles(HttpServletRequest req, File file) {
@@ -71,10 +73,23 @@ public class MyServlet extends HttpServlet {
             req.setAttribute("directories", getDirectories(files));
         }
     }
-    private List<File> getFiles(File[] files){
-        return Arrays.stream(files).filter(File::isFile).collect(Collectors.toList());
+    private List<FileService> getFiles(File[] files){
+        return Arrays.stream(files).filter(File::isFile).map(x -> new FileService(x,x.length())).collect(Collectors.toList());
     }
-    private List<File> getDirectories(File[] files){
-        return Arrays.stream(files).filter(File::isDirectory).collect(Collectors.toList());
+    private List<FileService> getDirectories(File[] files){
+        return Arrays.stream(files).filter(File::isDirectory).map(x -> new FileService(x,folderSize(x))).collect(Collectors.toList());
+    }
+    private static long folderSize(File directory) {
+        long length = 0;
+        File[] files = directory.listFiles();
+        if(files != null){
+            for (File file : files) {
+                if (file.isFile())
+                    length += file.length();
+                else
+                    length += folderSize(file);
+            }
+        }
+        return length;
     }
 }

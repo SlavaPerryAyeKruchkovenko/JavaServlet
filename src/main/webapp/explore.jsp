@@ -9,11 +9,18 @@
             font-family: "Roboto Light", serif;
             font-size: 18px;
         }
+        li {
+            list-style-type: none;
+        }
         .icon{
             width: 1em;
             height: 1em;
         }
-        ul li:not(:first-child){
+        .flex-row .pa2:not(:first-child){
+            margin-top: 0;
+            margin-left: 8px;
+        }
+        ul .inline-flex{
             margin-top: 8px;
         }
         a{
@@ -30,24 +37,53 @@
         <i data-feather="arrow-up-circle" class="icon"></i>
         <a class="ml2" href="?path=${path.substring(0, path.lastIndexOf("\\") + (path.lastIndexOf("\\") != path.indexOf("\\") ? 0 : 1))}">Up</a><br>
     </div>
-    <span class="b mt2 pa2">Directories</span>
-    <ul class="flex-column flex ma0 pa2">
-        <c:forEach var="directory" items="${directories}">
-            <li class="inline-flex">
-                <i data-feather="folder" class="red icon"></i>
-                <a href="?path=${directory.getAbsolutePath()}" class="ml2">${directory.getName()}/</a>
-            </li>
-        </c:forEach>
+    <ul class="flex-row w-100 ma0 pa0">
+        <li class="pa2">
+            <span class="b">Directories</span>
+            <ul class="flex-column flex ma0 pa0">
+                <c:forEach var="directory" items="${directories}">
+                    <li class="inline-flex">
+                        <i data-feather="folder" class="red icon"></i>
+                        <a href="?path=${directory.file.getAbsolutePath()}" class="ml2">${directory.file.getName()}/</a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </li>
+        <li class="pa2">
+            <span class="b">Size</span>
+            <ul class="flex-column flex ma0 pa0">
+                <c:forEach var="directory" items="${directories}">
+                    <li class="inline-flex">
+                        <span>${directory.length} байт</span>
+                    </li>
+                </c:forEach>
+            </ul>
+        </li>
     </ul>
-    <span class="b mt2 pa2">Files</span>
-    <ul class="flex-column flex ma0 pa2">
-        <c:forEach var="file" items="${files}">
-            <li class="inline-flex">
-                <i data-feather="file" class="yellow icon"></i>
-                <a href="?path=${file.getAbsolutePath()}" class="ml2">${file.getName()}</a><br>
-            </li>
-        </c:forEach>
+    <ul class="flex-row w-100 ma0 pa0">
+        <li class="pa2">
+            <span class="b">Files</span>
+            <ul class="flex-column flex ma0 pa0">
+                <c:forEach var="file" items="${files}">
+                    <li class="inline-flex">
+                        <i data-feather="file" class="yellow icon"></i>
+                        <a href="?path=${file.file.getAbsolutePath()}" class="ml2">${file.file.getName()}</a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </li>
+        <li class="pa2">
+            <span class="b">Size</span>
+            <ul class="flex-column flex ma0 pa0">
+                <c:forEach var="file" items="${files}">
+                    <li class="inline-flex">
+                        <span class="ml2">${file.length} байт</span>
+                    </li>
+                </c:forEach>
+            </ul>
+        </li>
     </ul>
+
 </div>
 </body>
 <script src="https://unpkg.com/feather-icons"></script>
