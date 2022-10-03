@@ -30,7 +30,7 @@ public class MyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String path = req.getParameter("path");
         if (path == null) {
-            path = "C:\\";
+            path = "C:\\AMD";
         }
         path = path.replaceAll("%20", " ");
         File file = new File(path);
