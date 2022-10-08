@@ -31,7 +31,7 @@ public class LoginServlet extends HttpServlet {
                 resp.sendRedirect("/");
             }
             else{
-                resp.sendRedirect("/register");
+                resp.sendRedirect("/login");
             }
         }
     }
