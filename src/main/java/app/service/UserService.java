@@ -22,4 +22,5 @@ public class UserService {
     public String getEmail() {
         return email;
     }
+
 }

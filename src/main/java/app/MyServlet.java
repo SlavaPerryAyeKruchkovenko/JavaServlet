@@ -1,6 +1,7 @@
 package app;
 
 import app.service.FileService;
+import app.service.UserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -28,26 +29,32 @@ public class MyServlet extends HttpServlet {
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String path = req.getParameter("path");
-        if (path == null) {
-            path = "C:\\AMD";
-        }
-        path = path.replaceAll("%20", " ");
-        File file = new File(path);
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        if (file.isDirectory()) {
-            showFiles(req, file);
+        UserService user = db.userRepository.getUserFromCookie(req.getCookies());
+        if(user != null){
+            String path = req.getParameter("path");
+            if (path == null || !path.startsWith("D:\\"+user.getLogin()+"\\")) {
+                path = "D:\\"+user.getLogin();
+            }
+            path = path.replaceAll("%20", " ");
+            File file = new File(path);
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            if (file.isDirectory()) {
+                showFiles(req, file);
 
-            req.setAttribute("date", new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
-            req.setAttribute("path", path);
+                req.setAttribute("date", new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+                req.setAttribute("path", path);
 
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("explore.jsp");
-            requestDispatcher.forward(req, resp);
+                RequestDispatcher requestDispatcher = req.getRequestDispatcher("explore.jsp");
+                requestDispatcher.forward(req, resp);
+            }
+            else {
+                downloadFile(resp, file);
+            }
         }
-        else {
-            downloadFile(resp, file);
+        else{
+            resp.sendRedirect("/login");
         }
     }
 
