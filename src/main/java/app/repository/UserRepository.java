@@ -11,7 +11,14 @@ public class UserRepository {
     public UserService getUserByLogin(String login){
         return users.get(login);
     }
-    public void addUser(){
-
+    public boolean addUser(UserService user){
+        String login = user.getLogin();
+        if(users.containsKey(login)){
+            return false;
+        }
+        else{
+            users.put(login, user);
+            return true;
+        }
     }
 }
