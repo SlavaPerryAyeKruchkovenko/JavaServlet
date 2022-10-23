@@ -84,7 +84,7 @@ public class MyServlet extends HttpServlet {
         return Arrays.stream(files).filter(File::isFile).map(x -> new FileService(x,x.length())).collect(Collectors.toList());
     }
     private List<FileService> getDirectories(File[] files){
-        return Arrays.stream(files).filter(File::isDirectory).map(x -> new FileService(x,folderSize(x))).collect(Collectors.toList());
+        return Arrays.stream(files).filter(File::isDirectory).map(x -> new FileService(x,0)).collect(Collectors.toList());
     }
     private static long folderSize(File directory) {
         long length = 0;
