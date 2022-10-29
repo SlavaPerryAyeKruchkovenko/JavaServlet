@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/register")
 public class RegisterServlet extends HttpServlet {
 
     @Override
@@ -27,10 +26,10 @@ public class RegisterServlet extends HttpServlet {
         if (login != null && password != null && email != null) {
             UserService user = new UserService(login,password,email);
             if(db.userRepository.addUser(user)){
-                resp.sendRedirect("/login");
+                resp.sendRedirect("./login");
             }
             else{
-                resp.sendRedirect("/register");
+                resp.sendRedirect("./register");
             }
         }
     }

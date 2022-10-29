@@ -14,7 +14,7 @@
     </servlet>
     <servlet>
         <servlet-name>registerServlet</servlet-name>
-        <servlet-class>app.LoginServlet</servlet-class>
+        <servlet-class>app.RegisterServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>fileManager</servlet-name>

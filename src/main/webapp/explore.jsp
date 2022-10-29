@@ -35,7 +35,7 @@
 <div class="flex flex-column pt2 pb2">
     <div class="inline-flex ml2">
         <i data-feather="arrow-up-circle" class="icon"></i>
-        <a class="ml2" href="?path=${path.substring(0, path.lastIndexOf("\\") + (path.lastIndexOf("\\") != path.indexOf("\\") ? 0 : 1))}">Up</a><br>
+        <a class="ml2" href="./?path=${path.substring(0, path.lastIndexOf("\\") + (path.lastIndexOf("\\") != path.indexOf("\\") ? 0 : 1))}">Up</a><br>
     </div>
     <ul class="flex-row w-100 ma0 pa0">
         <li class="pa2">
@@ -44,7 +44,7 @@
                 <c:forEach var="directory" items="${directories}">
                     <li class="inline-flex">
                         <i data-feather="folder" class="red icon"></i>
-                        <a href="?path=${directory.file.getAbsolutePath()}" class="ml2">${directory.file.getName()}/</a>
+                        <a href="./?path=${directory.file.getAbsolutePath()}" class="ml2">${directory.file.getName()}/</a>
                     </li>
                 </c:forEach>
             </ul>
@@ -67,7 +67,7 @@
                 <c:forEach var="file" items="${files}">
                     <li class="inline-flex">
                         <i data-feather="file" class="yellow icon"></i>
-                        <a href="?path=${file.file.getAbsolutePath()}" class="ml2">${file.file.getName()}</a>
+                        <a href="./?path=${file.file.getAbsolutePath()}" class="ml2">${file.file.getName()}</a>
                     </li>
                 </c:forEach>
             </ul>

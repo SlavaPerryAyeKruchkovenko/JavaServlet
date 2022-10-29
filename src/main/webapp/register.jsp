@@ -83,12 +83,12 @@
                 </p>
             </form>
             <div class="inline-flex justify-between w-100">
-                <a class="back-link flex pointer items-center justify-center" rel="index" href="/">
+                <a class="back-link flex pointer items-center justify-center" rel="index" href="./">
                     <i data-feather="arrow-left" class="plus"></i>
                     <span>Назад к сайту</span>
                 </a>
                 <div class="flex-column">
-                    <a class="back-link flex pointer" href="/login">
+                    <a class="back-link flex pointer" href="./login">
                         <span>Уже есть аккаунт?</span>
                     </a>
                 </div>

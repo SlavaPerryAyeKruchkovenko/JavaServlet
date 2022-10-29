@@ -6,7 +6,6 @@ import app.service.UserService;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,13 +13,13 @@ import java.io.*;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import javax.swing.filechooser.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
-@WebServlet(urlPatterns = "/")
 public class MyServlet extends HttpServlet {
     //private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     @Override
@@ -32,8 +31,8 @@ public class MyServlet extends HttpServlet {
         UserService user = db.userRepository.getUserFromCookie(req.getCookies());
         if(user != null){
             String path = req.getParameter("path");
-            if (path == null || !path.startsWith("D:\\"+user.getLogin()+"\\")) {
-                path = "D:\\"+user.getLogin();
+            if (path == null) {
+                path = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
             }
             path = path.replaceAll("%20", " ");
             File file = new File(path);
@@ -54,7 +53,7 @@ public class MyServlet extends HttpServlet {
             }
         }
         else{
-            resp.sendRedirect("/login");
+            resp.sendRedirect("./login");
         }
     }
 

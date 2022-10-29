@@ -4,14 +4,13 @@ import app.service.UserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/login")
+
 public class LoginServlet extends HttpServlet {
 
     @Override
@@ -30,10 +29,10 @@ public class LoginServlet extends HttpServlet {
                 resp.addCookie(new Cookie("login", user.getLogin()));
                 resp.addCookie(new Cookie("email", user.getEmail()));
                 resp.addCookie(new Cookie("password", user.getPassword()));
-                resp.sendRedirect("/");
+                resp.sendRedirect("./");
             }
             else{
-                resp.sendRedirect("/login");
+                resp.sendRedirect("./login");
             }
         }
     }
