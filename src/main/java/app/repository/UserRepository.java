@@ -1,48 +1,45 @@
 package app.repository;
 
+import app.HibernateUtil;
 import app.service.UserService;
+import org.hibernate.Session;
 
 import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserRepository {
-    private final Map<String, UserService> users = new HashMap<>();
-
-    public UserService getUserByLogin(String login){
-        return users.get(login);
-    }
     public boolean addUser(UserService user){
-        String login = user.getLogin();
-        if(users.containsKey(login)){
+        try(Session session = HibernateUtil.getSession()){
+            session.beginTransaction();
+            session.persist(user);
+            session.getTransaction().commit();
+        }
+        catch (Exception ex){
+            System.out.println(ex.getMessage());
             return false;
         }
-        else{
-            users.put(login, user);
-            return true;
+        return true;
+    }
+    public UserService getUserByLogin(String login){
+        UserService user = null;
+        try(Session session = HibernateUtil.getSession()){
+            user = session.byNaturalId(UserService.class).using("login",login).load();
         }
+        catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return user;
+        }
+        return user;
     }
     public UserService getUserFromCookie(Cookie[] cookies){
-        UserService user = null;
-        String login = null;
-        String email = null;
-        String password = null;
         if(cookies !=null) {
             for(Cookie cookie: cookies) {
                 if("login".equals(cookie.getName())) {
-                    login = cookie.getValue();
+                    return this.getUserByLogin(cookie.getValue());
                 }
-                else if("email".equals(cookie.getName())) {
-                    email = cookie.getValue();
-                }
-                else if("password".equals(cookie.getName())) {
-                    password = cookie.getValue();
-                }
-            }
-            if(login != null && email != null && password != null){
-                user = new UserService(login,password,email);
             }
         }
-        return user;
+        return null;
     }
 }

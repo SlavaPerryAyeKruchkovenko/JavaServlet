@@ -1,6 +1,7 @@
 package app;
 
 import app.service.UserService;
+import org.hibernate.Session;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
