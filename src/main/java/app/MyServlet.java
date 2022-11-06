@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.filechooser.*;
@@ -32,7 +34,17 @@ public class MyServlet extends HttpServlet {
         if(user != null){
             String path = req.getParameter("path");
             if (path == null) {
-                path = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
+                path = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath(),user.getLogin())
+                        .getAbsolutePath();
+            }
+            else{
+                String path1 = new File(path).getCanonicalPath();
+                String path2 = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getCanonicalPath(),
+                        user.getLogin()).getCanonicalPath();
+                if(!path1.contains(path2)){
+                    path = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath(),user.getLogin())
+                            .getAbsolutePath();
+                }
             }
             path = path.replaceAll("%20", " ");
             File file = new File(path);
