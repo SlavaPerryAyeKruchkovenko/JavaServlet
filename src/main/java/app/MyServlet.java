@@ -35,15 +35,21 @@ public class MyServlet extends HttpServlet {
             String path = req.getParameter("path");
             if (path == null) {
                 path = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath(),user.getLogin())
-                        .getAbsolutePath();
+                        .getCanonicalPath();
             }
             else{
-                String path1 = new File(path).getCanonicalPath();
-                String path2 = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getCanonicalPath(),
-                        user.getLogin()).getCanonicalPath();
-                if(!path1.contains(path2)){
+                try {
+                    String path1 = new File(path).getCanonicalPath();
+                    String path2 = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getCanonicalPath(),
+                            user.getLogin()).getCanonicalPath();
+                    if(!path1.startsWith(path2)){
+                        path = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath(),user.getLogin())
+                                .getCanonicalPath();
+                    }
+                }
+                catch (Exception ex){
                     path = new File(FileSystemView.getFileSystemView().getDefaultDirectory().getPath(),user.getLogin())
-                            .getAbsolutePath();
+                            .getCanonicalPath();
                 }
             }
             path = path.replaceAll("%20", " ");
