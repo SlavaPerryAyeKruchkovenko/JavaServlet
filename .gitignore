@@ -39,3 +39,7 @@ build/
 .idea/
 
 src/main/resources/hibernate.cfg.xml
+
+hs_err_pid2072.log
+
+hs_err_pid13260.log

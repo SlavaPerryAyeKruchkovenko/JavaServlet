@@ -7,8 +7,13 @@ import org.hibernate.Session;
 import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class UserRepository {
+public class UserRepository implements IUserRepository{
     public boolean addUser(UserService user){
         try(Session session = HibernateUtil.getSession()){
             session.beginTransaction();
